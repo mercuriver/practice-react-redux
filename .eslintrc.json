@@ -9,6 +9,7 @@
         "airbnb-base",
         "prettier"
     ],
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -22,6 +23,7 @@
     "rules": {
         "no-console": "off",
         "no-param-reassign": "off",
-        "no-return-assign": "off"
+        "no-return-assign": "off",
+        "react/prop-types": "off"
     }
 }
