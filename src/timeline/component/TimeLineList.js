@@ -1,11 +1,14 @@
 import React from "react";
 
 // eslint-disable-next-line react/prop-types
-function TimeLineList({ timelines }) {
+function TimeLineList({ timelines, onLike }) {
   return (
     <ul>
-      {timelines.map((timeline, index) => (
-        <li key={`${timeline.desc}_${index}`}>{timeline.desc}</li>
+      {timelines.map(({ id, desc, likes }) => (
+        <li key={`timeline_${id}`}>
+          {desc}
+          <button data-id={id} onClick={onLike}>{`좋아요(${likes})`}</button>
+        </li>
       ))}
     </ul>
   );

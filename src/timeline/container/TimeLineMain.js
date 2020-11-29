@@ -1,38 +1,54 @@
 import React from "react";
+import { connect } from "react-redux";
+
 import store from "../../common/store";
 import { getNextTimeline } from "../../common/mockData";
-import { addTimeline } from "../state";
+
+import { actions } from "../state";
 import TimeLineList from "../component/TimeLineList";
 
-class TimeLineMain extends React.PureComponent {
-  state = {
-    timelines: store.getState().timeline.timelines,
+class TimeLineMain extends React.Component {
+  // state = {
+  //   timelines: store.getState().timeline.timelines,
+  // };
+
+  // componentDidMount() {
+  //   this.unsubscribe = store.subscribe(() => {
+  //     this.setState({ timelines: store.getState().timeline.timelines });
+  //   });
+  // }
+  //
+  // componentWillUnmount() {
+  //   this.unsubscribe();
+  // }
+
+  onLike = (e) => {
+    const { timelines } = this.props;
+    const id = Number(e.target.dataset.id);
+    const timeline = timelines.find((item) => item.id === id);
+    this.props.requestLike(timeline);
   };
-
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState({ timelines: store.getState().timeline.timelines });
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
 
   onAdd = () => {
     const timeline = getNextTimeline();
-    store.dispatch(addTimeline(timeline));
+    store.dispatch(actions.addTimeline(timeline));
   };
 
   render() {
-    console.log("TimelineMain render");
+    const { timelines, isLoading } = this.props;
     return (
       <div>
         <button onClick={this.onAdd}>타임라인 추가</button>
-        <TimeLineList timelines={this.state.timelines} />
+        <TimeLineList timelines={timelines} onLike={this.onLike} />
+        {!!isLoading && <p>전송 중...</p>}
       </div>
     );
   }
 }
 
-export default TimeLineMain;
+const mapStateToProps = (state) => ({
+  timelines: state.timeline.timelines,
+  isLoading: state.timeline.isLoading,
+});
+
+export default connect(mapStateToProps, actions)(TimeLineMain);
