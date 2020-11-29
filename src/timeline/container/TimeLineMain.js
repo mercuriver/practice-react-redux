@@ -4,9 +4,15 @@ import { getNextTimeline } from "../../common/mockData";
 import { addTimeline } from "../state";
 import TimeLineList from "../component/TimeLineList";
 
-class TimeLineMain extends React.Component {
+class TimeLineMain extends React.PureComponent {
+  state = {
+    timelines: store.getState().timeline.timelines,
+  };
+
   componentDidMount() {
-    this.unsubscribe = store.subscribe(() => this.forceUpdate());
+    this.unsubscribe = store.subscribe(() => {
+      this.setState({ timelines: store.getState().timeline.timelines });
+    });
   }
 
   componentWillUnmount() {
@@ -20,11 +26,10 @@ class TimeLineMain extends React.Component {
 
   render() {
     console.log("TimelineMain render");
-    const { timelines } = store.getState().timeline;
     return (
       <div>
         <button onClick={this.onAdd}>타임라인 추가</button>
-        <TimeLineList timelines={timelines} />
+        <TimeLineList timelines={this.state.timelines} />
       </div>
     );
   }

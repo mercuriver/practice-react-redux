@@ -4,9 +4,15 @@ import { getNextFriend } from "../../common/mockData";
 import { addFriend } from "../state";
 import FriendList from "../component/FriendList";
 
-class FriendMain extends React.Component {
+class FriendMain extends React.PureComponent {
+  state = {
+    friends: store.getState().friend.friends,
+  };
+
   componentDidMount() {
-    this.unsubscribe = store.subscribe(() => this.forceUpdate());
+    this.unsubscribe = store.subscribe(() => {
+      this.setState({ friends: store.getState().friend.friends });
+    });
   }
 
   componentWillUnmount() {
@@ -20,11 +26,10 @@ class FriendMain extends React.Component {
 
   render() {
     console.log("FriendMain render");
-    const { friends } = store.getState().friend;
     return (
       <div>
         <button onClick={this.onAdd}>친구 추가</button>
-        <FriendList friends={friends} />
+        <FriendList friends={this.state.friends} />
       </div>
     );
   }
