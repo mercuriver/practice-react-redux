@@ -4,15 +4,14 @@ import { connect } from "react-redux";
 import { getNextFriend } from "../../common/mockData";
 import * as actions from "../state";
 import {
-  getFriendsWithAgeLimit,
-  getFriendsWithAgeShowLimit,
+  makeGetFriendWithAgeLimit,
   getAgeLimit,
   getShowLimit,
 } from "../state/selector";
 
 import FriendList from "../component/FriendList";
 import NumberSelect from "../component/NumberSelect";
-import { MAX_AGE_LIMIT, MAX_SHOW_LIMIT } from "../common";
+import { MAX_AGE_LIMIT } from "../common";
 
 const ageLimitOptions = [
   15,
@@ -29,7 +28,6 @@ const ageLimitOptions = [
   70,
   MAX_AGE_LIMIT,
 ];
-const showLimitOptions = [2, 4, 6, MAX_SHOW_LIMIT];
 
 class FriendMain extends React.Component {
   onAdd = () => {
@@ -39,14 +37,7 @@ class FriendMain extends React.Component {
 
   render() {
     console.log("FriendMain render");
-    const {
-      friendsWithAgeLimit,
-      friendsWithAgeShowLimit,
-      ageLimit,
-      showLimit,
-      setAgeLimit,
-      setShowLimit,
-    } = this.props;
+    const { friendsWithAgeLimit, ageLimit, setAgeLimit } = this.props;
 
     return (
       <div>
@@ -58,25 +49,21 @@ class FriendMain extends React.Component {
           postfix="세 이하만 보기"
         />
         <FriendList friends={friendsWithAgeLimit} />
-        <NumberSelect
-          onChange={setShowLimit}
-          value={showLimit}
-          options={showLimitOptions}
-          postfix="명 이하만 보기(연령 제한 적용)"
-        />
-        <FriendList friends={friendsWithAgeShowLimit} />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    friendsWithAgeLimit: getFriendsWithAgeLimit(state),
-    friendsWithAgeShowLimit: getFriendsWithAgeShowLimit(state),
-    ageLimit: getAgeLimit(state),
-    showLimit: getShowLimit(state),
+const makeMapStateToProps = () => {
+  const getFriendWithAgeLimit = makeGetFriendWithAgeLimit();
+  const mapStateToProps = (state, props) => {
+    return {
+      friendsWithAgeLimit: getFriendWithAgeLimit(state, props),
+      ageLimit: getAgeLimit(state, props),
+      showLimit: getShowLimit(state),
+    };
   };
+  return mapStateToProps;
 };
 
-export default connect(mapStateToProps, actions)(FriendMain);
+export default connect(makeMapStateToProps, actions)(FriendMain);
