@@ -8,7 +8,7 @@ const INCREASE_NEXT_PAGE = "timeline/INCREASE_NEXT_PAGE";
 export const addTimeline = (timeline) => ({ type: ADD, timeline });
 export const removeTimeline = (timeline) => ({ type: REMOVE, timeline });
 export const editTimeline = (timeline) => ({ type: EDIT, timeline });
-export const increaseNextPage = () => ({ type: INCREASE_NEXT_PAGE, timeline });
+export const increaseNextPage = () => ({ type: INCREASE_NEXT_PAGE });
 
 const INITIAL_STATE = { timelines: [], nextPage: 0 };
 const reducer = createReducer(INITIAL_STATE, {
@@ -25,7 +25,7 @@ const reducer = createReducer(INITIAL_STATE, {
       state.timelines[index] = action.timeline;
     }
   },
-  [INCREASE_NEXT_PAGE]: (state, action) => (state.nextPage += 1),
+  [INCREASE_NEXT_PAGE]: (state) => (state.nextPage += 1),
 });
 
 export default reducer;
