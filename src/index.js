@@ -1,17 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createStore, combineReducers } from "redux";
+import timelineReducer, {
+  addTimeline,
+  removeTimeline,
+  editTimeline,
+  increaseNextPage,
+} from "./timeline/state";
+import friendReducer, {
+  addFriend,
+  removeFriend,
+  editFriend,
+} from "./friend/state";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const reducer = combineReducers({
+  timeline: timelineReducer,
+  friend: friendReducer,
+});
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const store = createStore(reducer);
+store.subscribe(() => {
+  const state = store.getState();
+  console.log(state);
+});
+
+store.dispatch(addTimeline({ id: 1, desc: "샘플 데이터 코드" }));
+store.dispatch(addTimeline({ id: 2, desc: "리덕스 코드" }));
+store.dispatch(increaseNextPage());
+store.dispatch(editTimeline({ id: 2, desc: "리덕스 코드 테스트" }));
+store.dispatch(removeTimeline({ id: 1, desc: "샘플 데이터 코드" }));
+
+store.dispatch(addFriend({ id: 1, desc: "김익명" }));
+store.dispatch(addFriend({ id: 2, desc: "박실명" }));
+store.dispatch(editFriend({ id: 2, desc: "박사실가명" }));
+store.dispatch(removeFriend({ id: 1, desc: "김익명" }));
