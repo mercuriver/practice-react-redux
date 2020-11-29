@@ -3,6 +3,12 @@ import { connect } from "react-redux";
 
 import { getNextFriend } from "../../common/mockData";
 import * as actions from "../state";
+import {
+  getFriendsWithAgeLimit,
+  getFriendsWithAgeShowLimit,
+  getAgeLimit,
+  getShowLimit,
+} from "../state/selector";
 
 import FriendList from "../component/FriendList";
 import NumberSelect from "../component/NumberSelect";
@@ -65,14 +71,12 @@ class FriendMain extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { friends, ageLimit, showLimit } = state.friend;
-
-  const friendsWithAgeLimit = friends.filter(
-    (friend) => friend.age <= ageLimit
-  );
-  const friendsWithAgeShowLimit = friendsWithAgeLimit.slice(0, showLimit);
-
-  return { friendsWithAgeLimit, friendsWithAgeShowLimit, friends, ageLimit };
+  return {
+    friendsWithAgeLimit: getFriendsWithAgeLimit(state),
+    friendsWithAgeShowLimit: getFriendsWithAgeShowLimit(state),
+    ageLimit: getAgeLimit(state),
+    showLimit: getShowLimit(state),
+  };
 };
 
 export default connect(mapStateToProps, actions)(FriendMain);
