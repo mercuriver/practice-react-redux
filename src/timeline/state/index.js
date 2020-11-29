@@ -27,7 +27,7 @@ const INITIAL_STATE = { nextPage: 0, isLoading: false };
 const reducer = createReducer(INITIAL_STATE, {
   [types.INCREASE_NEXT_PAGE]: (state) => (state.nextPage += 1),
   [types.ADD_LIKE]: (state, action) => {
-    const timeline = state.timeline.find(
+    const timeline = state.timelines.find(
       (item) => item.id === action.timelineId
     );
     if (timeline) {
