@@ -1,4 +1,4 @@
-import { all, call, put, take, fork } from "redux-saga/effects";
+import { all, call, put, take, fork, debounce } from "redux-saga/effects";
 
 import { actions, types } from "./index";
 import { callApiLike } from "../../common/api";
@@ -19,6 +19,11 @@ export function* fetchData(action) {
   }
 }
 
+export function* trySetText(action) {
+  const { text } = action;
+  yield put(actions.setText(text));
+}
+
 export default function* watcher() {
-  yield all([fork(fetchData)]);
+  yield all([fork(fetchData), debounce(500, types.TRY_SET_TEXT, trySetText)]);
 }
